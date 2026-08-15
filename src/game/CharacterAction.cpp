@@ -78,14 +78,14 @@ const char *CharacterActionPlayer::SuggestedFace() const
 {
     switch (action_)
     {
-        case CharacterAction::HandsFolded: return "verified_indecisive_thought";
-        case CharacterAction::Point: return "verified_steely_determination";
-        case CharacterAction::PresentLow: return "verified_awkward_conflict";
-        case CharacterAction::PresentOpen: return "verified_baffled_closed_eyes";
-        case CharacterAction::Wave: return "verified_excited_surprise";
-        case CharacterAction::None: return "verified_roundface_teasing_smirk";
+        case CharacterAction::HandsFolded: return "puzzled";
+        case CharacterAction::Point: return "serious";
+        case CharacterAction::PresentLow: return "uneasy";
+        case CharacterAction::PresentOpen: return "resigned";
+        case CharacterAction::Wave: return "happy";
+        case CharacterAction::None: return "smug";
     }
-    return "verified_roundface_teasing_smirk";
+    return "smug";
 }
 
 int CharacterActionPlayer::LoadedPoseCount() const

@@ -32,6 +32,32 @@ bool SystemDog::Load()
     return idle_.id != 0 && quest_.id != 0 && laugh_.id != 0;
 }
 
+void SystemDog::PlaceForConversation(Vector2 position, float speakerX)
+{
+    position_ = position;
+    positioned_ = true;
+    lastPlayerX_ = speakerX;
+    formationSide_ = position_.x < speakerX ? -1 : 1;
+    pendingSide_ = formationSide_;
+    pendingTravel_ = 0.0F;
+    facing_.FaceToward(position_.x, speakerX);
+}
+
+void SystemDog::FaceToward(float speakerX)
+{
+    facing_.FaceToward(position_.x, speakerX);
+}
+
+void SystemDog::TriggerHit()
+{
+    hitReactionTimer_ = 0.32F;
+}
+
+void SystemDog::UpdateReaction(float deltaTime)
+{
+    hitReactionTimer_ = std::max(0.0F, hitReactionTimer_ - deltaTime);
+}
+
 void SystemDog::Update(float deltaTime, Vector2 playerFeet, bool playerFacingRight)
 {
     if (!positioned_)
@@ -88,12 +114,15 @@ void SystemDog::DrawWorld(SystemDogPose pose, float time) const
     if (!positioned_ || texture == nullptr || texture->id == 0) return;
 
     const float hover = std::sin(time * 3.2F) * 3.0F;
+    const float hitShake = hitReactionTimer_ > 0.0F
+                               ? std::sin(hitReactionTimer_ * 95.0F) * 8.0F
+                               : 0.0F;
     constexpr float height = 112.0F;
     const float width = height * texture->width / static_cast<float>(texture->height);
     DrawEllipse(static_cast<int>(position_.x), static_cast<int>(position_.y + 18.0F),
                 width * 0.30F, 6.0F, Fade(BLACK, 0.18F));
     const Rectangle source = SourceForFacing(*texture, facing_);
-    const Rectangle destination = {position_.x - width / 2.0F,
+    const Rectangle destination = {position_.x - width / 2.0F + hitShake,
                                    position_.y - height + hover,
                                    width, height};
     DrawTexturePro(*texture, source, destination, {0.0F, 0.0F}, 0.0F, WHITE);
@@ -108,5 +137,10 @@ const Texture2D *SystemDog::Pose(SystemDogPose pose) const
         case SystemDogPose::Idle: return idle_.id != 0 ? &idle_ : nullptr;
     }
     return nullptr;
+}
+
+Vector2 SystemDog::Position() const
+{
+    return position_;
 }
 } // namespace game

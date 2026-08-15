@@ -2,6 +2,7 @@
 
 #include "game/Dialogue.hpp"
 #include "game/GameInput.hpp"
+#include "game/SystemChoice.hpp"
 
 #include <raylib.h>
 
@@ -21,9 +22,15 @@ public:
     bool Load();
     void DrawHud(const std::string &objective, float controlsHintTimer) const;
     void DrawSystemNotice(const std::string &text, float timer, const Texture2D *mascot) const;
+    void DrawSkillUnlock(const std::string &skillName, float timer, float duration,
+                         const Texture2D *mascot) const;
+    void DrawQuestIssued(const std::string &title, const std::string &objective,
+                         const std::string &reward, float timer, float duration,
+                         const Texture2D *mascot) const;
     void DrawPrompt(const std::string &prompt) const;
     void DrawDialogue(const DialogueLine &line, const Texture2D *portrait,
                       const Texture2D *portraitFace = nullptr) const;
+    void DrawSystemChoice(const SystemChoice &choice, const Texture2D *mascot) const;
     void DrawLevelTitle(float timer) const;
     void DrawMobileControls(const GameInput &input) const;
     [[nodiscard]] Font GetFont() const;
@@ -31,7 +38,6 @@ public:
 private:
     Font font_ = {};
     Texture2D sneakIcon_ = {};
-    Texture2D goofyIcon_ = {};
     bool ownsFont_ = false;
 };
 
