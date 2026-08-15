@@ -33,22 +33,36 @@ set(GAME_SOURCES
     src/game/AssetLocator.cpp
     src/game/BackgroundMusic.cpp
     src/game/BambooVillageLevel.cpp
+    src/game/BedroomIntroLevel.cpp
     src/game/CharacterAction.cpp
     src/game/CharacterFacing.cpp
     src/game/Chicken.cpp
+    src/game/CombatSystem.cpp
     src/game/Dialogue.cpp
     src/game/Elder.cpp
     src/game/FaceLibrary.cpp
     src/game/FaceRenderer.cpp
     src/game/Game.cpp
     src/game/GameInput.cpp
+    src/game/GameProgress.cpp
+    src/game/HomeExteriorLevel.cpp
+    src/game/ItemCatalog.cpp
     src/game/LevelManager.cpp
+    src/game/LoadingScreen.cpp
+    src/game/NeighborWoman.cpp
+    src/game/NeighborNightLevel.cpp
     src/game/Player.cpp
     src/game/Quest.cpp
+    src/game/RuffianGroup.cpp
     src/game/SoundEffects.cpp
+    src/game/SkillCatalog.cpp
+    src/game/SplashScreen.cpp
     src/game/SystemDog.cpp
+    src/game/SystemChoice.cpp
+    src/game/SystemMenu.cpp
     src/game/TextureAsset.cpp
     src/game/Ui.cpp
+    src/game/VillageGateLevel.cpp
 )
 
 if(ANDROID)
