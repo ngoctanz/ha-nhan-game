@@ -24,22 +24,27 @@ enum class QuestState
     CatchChicken,
     CollectShard,
     ReturnToElder,
-    Complete
+    Complete,
+    LeaveVillage,
+    LeavingVillage
 };
 
 class BambooVillageLevel final : public Level
 {
 public:
+    explicit BambooVillageLevel(GameProgress &progress) : Level(progress), quest_(progress) {}
     ~BambooVillageLevel() override;
     bool Load() override;
     void Update(float deltaTime, const GameInput &input) override;
     void Draw(const Ui &ui) const override;
+    [[nodiscard]] LevelTransition RequestedTransition() const override { return transition_; }
 
 private:
     void ApplyDialogueAction(DialogueAction action);
     void HandleInteraction(const GameInput &input);
     void SyncDialoguePresentation();
     void BeginChickenResultDialogue();
+    void BeginChickenLoreDialogue();
     [[nodiscard]] const std::string &Objective() const;
     [[nodiscard]] std::string InteractionPrompt() const;
     [[nodiscard]] const Texture2D *CurrentPortrait() const;
@@ -51,6 +56,8 @@ private:
     Chicken chicken_;
     Elder elder_;
     FaceLibrary faces_;
+    FaceAnimator playerFace_;
+    FaceAnimator elderFace_;
     SystemDog systemDog_;
     SoundEffects soundEffects_;
     Dialogue dialogue_;
@@ -63,10 +70,13 @@ private:
     int catchAttempts_ = 0;
     float worldTime_ = 0.0F;
     float toastTimer_ = 4.5F;
+    float questIssuedTimer_ = 0.0F;
     float levelTitleTimer_ = 4.0F;
     float controlsHintTimer_ = 5.0F;
     std::uint64_t observedDialogueRevision_ = 0;
     GameInput input_ = {};
+    LevelTransition transition_ = LevelTransition::None;
+    const std::string exitObjective_ = "Đi tới đầu làng tìm dấu vết Gà Linh Khí";
     std::string toast_ = "Ting! Ký chủ mới tới. Việc đầu tiên: đi hỏi xin cơm.";
 };
 } // namespace game
