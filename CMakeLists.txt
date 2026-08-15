@@ -81,6 +81,13 @@ if(MSVC)
     target_compile_options(funny-game PRIVATE /utf-8)
 endif()
 
+if(ANDROID)
+    # raylib compiles android_native_app_glue.c into libraylib.a, which defines
+    # ANativeActivity_onCreate. Because no game source references it directly the
+    # linker would strip the object; -u forces it to be kept in libmain.so.
+    target_link_options(funny-game PRIVATE -u ANativeActivity_onCreate)
+endif()
+
 if(MINGW)
     # Keep the Windows demo portable: no MinGW runtime DLLs beside the exe.
     target_link_options(funny-game PRIVATE -static -static-libgcc -static-libstdc++ -mwindows)

@@ -26,6 +26,31 @@ Sound LoadMp3Effect(const char *relativePath, float volume)
     return sound;
 }
 
+Sound LoadMp3EffectCropped(const char *relativePath, float volume, float maxSeconds)
+{
+    Sound sound = {};
+    const std::string path = ResolveAssetPath(relativePath);
+    int dataSize = 0;
+    unsigned char *data = LoadFileData(path.c_str(), &dataSize);
+    if (data == nullptr || dataSize <= 0) return sound;
+
+    Wave wave = LoadWaveFromMemory(".mp3", data, dataSize);
+    if (IsWaveValid(wave))
+    {
+        // Crop to maxSeconds to prevent the meme from playing forever.
+        const unsigned int maxSamples =
+            static_cast<unsigned int>(maxSeconds * static_cast<float>(wave.sampleRate));
+        if (wave.frameCount > maxSamples)
+            WaveCrop(&wave, 0, static_cast<int>(maxSamples));
+
+        sound = LoadSoundFromWave(wave);
+        UnloadWave(wave);
+        if (IsSoundValid(sound)) SetSoundVolume(sound, volume);
+    }
+    UnloadFileData(data);
+    return sound;
+}
+
 void UnloadEffect(Sound &sound)
 {
     if (IsSoundValid(sound)) UnloadSound(sound);
@@ -60,7 +85,7 @@ bool SoundEffects::Load()
     if (!IsAudioDeviceReady()) return false;
     huh_ = LoadMp3Effect("assets/sounds/huh_37bAoRo.mp3", 0.76F);
     doIt_ = LoadMp3Effect("assets/sounds/boi-doit-do-it.mp3", 0.72F);
-    caoNiMa_ = LoadMp3Effect("assets/sounds/cao-ni-ma-meme.mp3", 0.68F);
+    caoNiMa_ = LoadMp3EffectCropped("assets/sounds/cao-ni-ma-meme.mp3", 0.68F, 3.0F);
     return IsSoundValid(huh_) && IsSoundValid(doIt_) && IsSoundValid(caoNiMa_);
 }
 
