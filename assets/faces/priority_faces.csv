@@ -1,0 +1,46 @@
+name,legacy_name,meaning_vi,usage_tags,status
+verified_shocked_gasp,shocked_gasp,"Sốc; há hốc mồm","shocked;gasp;surprised",verified
+verified_knowing_suspicion,villain_smirk,"Biết đối phương sắp làm gì; nghi ngờ; nhìn thấu đối phương","insight;suspicious;read_opponent",verified
+verified_lecherous_smirk,sly_tiny_smile,"Nụ cười đê tiện","lecherous;shameless;dirty_thought",verified
+verified_lecherous_blush,blushing_smile,"Ứng đỏ khi xuất hiện ý nghĩ đê tiện","blush;lecherous;dirty_thought",verified
+verified_attracted_nosebleed,flustered_nosebleed,"Chảy máu mũi khi thấy gái xinh hoặc bị hấp dẫn mạnh","attraction;nosebleed;beauty_reaction",verified
+verified_contempt_side_eye,disappointed_side_eye,"Tỏ vẻ xem thường","contempt;look_down;judging",verified
+verified_beaten_nosebleed,beaten_nosebleed,"Mặt bầm dập và chảy máu mũi do bị đánh","hurt;beaten;nosebleed",verified
+verified_deep_thought,disgusted_wince,"Đang suy nghĩ","thinking;considering",verified
+verified_contempt_whistle,goofy_whistle,"Tỏ vẻ khinh bỉ","contempt;mocking",verified
+verified_disbelief_panic,cartoon_panic,"Không thể tin được và sợ hãi","disbelief;fear;panic",verified
+verified_confused_side_eye,confused_side_eye,"Cảm thấy khó hiểu","confused;puzzled",verified
+verified_curious_surprise,dizzy_goofy,"Hóng chuyện; bất ngờ; cảm thấy thú vị","curious;surprised;interested",verified
+verified_indecisive_thought,annoyed_eyes_closed,"Nhắm mắt đăm chiêu; khó quyết định","thinking;indecisive;eyes_closed",verified
+verified_playful_wink,playful_wink,"Nụ cười ngộ nghĩnh; dùng cho dáng đi rón rén","playful;funny;sneak",verified
+verified_baffled_closed_eyes,smug_closed_eyes,"Khó hiểu trước hành động vừa thấy","confused;questioning_action",verified
+verified_uneasy_suspicion,sad_downcast,"Nghi ngờ và cảm thấy có vấn đề","suspicious;uneasy;something_wrong",verified
+verified_guilty_grin,vampire_grin,"Chột dạ","guilty;startled;exposed",verified
+verified_shy_glow,love_struck_glow,"Ngại ngùng; ửng đỏ","embarrassed;shy;blush",verified
+verified_awkward_conflict,smug_side_smile,"Khó xử; không biết phản ứng thế nào","awkward;conflicted;uncomfortable",verified
+verified_angry_surprise,furious_shout,"Bất ngờ và tức giận","surprised;angry;outburst",verified
+verified_focused_contemplation,skeptical_wink,"Nhìn chăm chú; đăm chiêu","focused;contemplating;watching",verified
+verified_baffled_shout,panicked_shout,"Khó hiểu; phản ứng thành tiếng","confused;baffled;shout",verified
+verified_displeased_smile,content_smile,"Tỏ vẻ không vừa lòng","displeased;dissatisfied;restrained",verified
+verified_excited_surprise,cheerful_surprise,"Ngạc nhiên và hơi phấn khích","surprised;excited;energized",verified
+verified_helpless_contemplation,angry_side_eye,"Đăm chiêu; bất lực; không biết nói thế nào","thinking;helpless;speechless",verified
+verified_goofy_grin,worried_grimace,"Cười tếu táo","goofy;funny;grin",verified
+verified_cool_confidence,cool_sunglasses,"Ngầu lòi; tự tin","cool;confident;stylish",verified
+verified_childlike_pout,shy_pout,"Biểu cảm như một đứa trẻ","childlike;pout;innocent",verified
+verified_beaming_closed_eyes,mischievous_grin,"Cười tít mắt","beaming;closed_eyes;happy",verified
+verified_embarrassed_blush,embarrassed_nosebleed,"Nghe hoặc thấy điều gì đó rồi đỏ mặt ngại ngùng","embarrassed;blush;shy_reaction",verified
+verified_dazed_blank_stare,smug_realistic,"Đôi mắt mất nét; không còn tỉnh táo","dazed;blank_stare;unconscious",verified
+verified_tearful_restraint,sad_tears,"Cố gắng kìm nước mắt","tearful;holding_back;emotional",verified
+verified_full_cry,laughing_tears,"Khóc hẳn; nước mắt tuôn ra","crying;tears;overwhelmed",verified
+verified_pained_flinch,crying_grimace,"Đau nhói hoặc chột dạ","pain;flinch;guilty_reaction",verified
+verified_disbelief_open_mouth,surprised_open_mouth,"Khó tin; há miệng bất ngờ","disbelief;open_mouth;surprised",verified
+verified_angry_yell,delighted_laugh,"Tức giận và la hét","angry;yell;shouting",verified
+verified_startled_panic,terrified_scream,"Hốt hoảng","startled;panic;scared",verified
+verified_roundface_teasing_smirk,subtle_smirk,"Nét khịa tếu táo; hợp nhân vật béo tròn","teasing;goofy;round_character",verified
+verified_friendly_teasing_glance,confused_side_glance,"Nhìn kháy; khịa vui giữa người quen","friendly_tease;side_glance;banter",verified
+verified_wise_goatee,worried_goatee,"Có râu; hiểu biết và già dặn","wise;mature;goatee",verified
+verified_angry_side_eye,disgusted_side_eye,"Tức giận; liếc khó chịu","angry;side_eye;irritated",verified
+verified_stunned_disbelief,stern_angry,"Khó tin và bất ngờ","stunned;disbelief;surprised",verified
+verified_extreme_disbelief,suspicious_concern,"Cực kỳ khó tin","extreme_disbelief;shocked;doubt",verified
+verified_steely_determination,furious_disapproval,"Quyết tâm và cứng rắn","determined;resolute;steely",verified
+verified_skeptical_tease,neutral_realistic,"Không tin lời đối phương; hơi khịa","skeptical;teasing;doubt",verified
