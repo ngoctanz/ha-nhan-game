@@ -2,7 +2,7 @@
   "id": "ha_nhan",
   "displayName": "Hà Nhân",
   "defaultEmotion": "angry",
-  "sharedFaceLibrary": "../../faces/catalog.csv",
+  "sharedFaceLibrary": "../../faces/boy_faces/male_face_expression_map.md",
   "movementAnimations": {
     "sneak": {
       "root": "actions/sneak",
@@ -15,7 +15,7 @@
       "fps": 22,
       "frameCount": 33,
       "source": "ha-nhan-chibi.gif",
-      "control": "C + A/D"
+      "activation": "event_only"
     }
   },
   "emotions": {

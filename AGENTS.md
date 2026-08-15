@@ -159,9 +159,25 @@ DrawFaceOverlay(face, bodyDestination, anchor, bodyFlipped, faceFlipped);
 ## 7. Checklist trước khi bàn giao
 
 1. Build Release thành công.
-2. Chạy game ít nhất 5 giây không thoát sớm.
-3. Kiểm tra action lúc bắt đầu câu và sau khi đổi sang câu kế tiếp.
-4. Đứng bên trái rồi bên phải NPC; body và mặt phải cùng quay về người chơi.
-5. Mặt không nhỏ, không bị cắt, không lệch ra phía sau và không nghiêng ngược.
-6. Actor chuyển đủ state trước khi phát event kết thúc.
-7. Không có texture cùng đường dẫn bị nạp lặp cho các pose thoại.
+2. Không tự chạy game, preview, Android hay kiểm thử thủ công sau build.
+3. Báo ngắn gọn build thành công hay thất bại; người dùng tự kiểm tra gameplay,
+   action, hướng nhìn, face anchor và giao diện.
+4. Không build Android/APK nếu người dùng không yêu cầu rõ.
+
+## 8. Ponytail project-local: workflow tối giản
+
+- Dùng `rg` để xác định symbol, file và dòng liên quan trước khi mở nội dung.
+- Chỉ đọc file hoặc đoạn code trực tiếp cần cho thay đổi hiện tại. Không quét toàn
+  repository, không đọc trọn file lớn khi một đoạn nhỏ đã đủ ngữ cảnh.
+- Không đọc lại nội dung đã đọc trong cùng task nếu file chưa thay đổi.
+- Sau khi xác định đúng vị trí, thực hiện thay đổi trực tiếp và tối thiểu; ưu tiên
+  tái sử dụng code, utility và dependency đã có.
+- Không tạo abstraction, fallback, compatibility layer, script hay tài liệu ngoài
+  phạm vi yêu cầu hiện tại.
+- Không lập kế hoạch dài, không tạo sub-agent và không khảo sát mở rộng trừ khi
+  người dùng yêu cầu hoặc thay đổi có rủi ro cao bắt buộc phải kiểm tra.
+- Sau khi sửa code, chỉ build target liên quan để xác nhận compile/link. Không tự
+  mở executable; người dùng chịu trách nhiệm test hành vi và hình ảnh.
+- Với thay đổi chỉ gồm tài liệu/instruction, không chạy build.
+- Phản hồi tiến độ và bàn giao ngắn gọn: file đã sửa, kết quả build và lỗi còn lại
+  nếu có.

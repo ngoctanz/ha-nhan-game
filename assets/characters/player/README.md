@@ -16,12 +16,13 @@ emotions/
 Ngoài bộ Animate cũ, Hà Nhân hiện có thêm:
 
 - `actions/sneak/`: sáu frame đi rón rén, giữ `Ctrl` khi di chuyển.
-- `actions/goofy_walk/`: 33 frame trích từ `ha-nhan-chibi.gif`, giữ `C` khi di chuyển.
-- `../../faces/expressions/`: thư viện 50 biểu cảm export dùng chung cho hội thoại và các model mặt trống.
+- `actions/goofy_walk/`: 33 frame trích từ `ha-nhan-chibi.gif`, dành cho event về sau;
+  người chơi không thể tự kích hoạt từ input hoặc mobile UI.
+- `../../faces/boy_faces/`: thư viện 50 biểu cảm nam, mỗi biểu cảm có 6 frame dùng chung cho hội thoại và các model mặt trống.
 
 Các khóa portrait hội thoại có dạng `player:<expression>`, ví dụ
-`player:shocked_gasp`, `player:smug_side_smile`, `player:worried_talking`.
-Danh sách đầy đủ nằm trong `assets/faces/catalog.csv`.
+`player:angry`, `player:stunned_disbelief`, `player:uneasy`.
+Danh sách đầy đủ nằm trong `assets/faces/boy_faces/male_face_expression_map.md`.
 
 Khuôn mặt không còn được dùng như một portrait rời. Game vẽ thân nhân vật trước,
 sau đó `FaceRenderer` đè biểu cảm hiện tại trực tiếp lên vùng đầu của sprite.
