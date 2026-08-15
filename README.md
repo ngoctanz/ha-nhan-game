@@ -149,6 +149,13 @@ Các module gameplay chính:
 Project hiện ở giai đoạn phát triển. Nội dung chapter, cân bằng gameplay và asset
 có thể tiếp tục thay đổi.
 
+## Giấy phép
+
+Mã nguồn và tài liệu của dự án được phát hành theo [MIT License](LICENSE). Asset
+hình ảnh, font, âm nhạc, sound effect và source artwork không mặc định thuộc MIT;
+phạm vi sử dụng và các ngoại lệ được ghi trong
+[`ASSET_LICENSE.md`](ASSET_LICENSE.md).
+
 ## Phát triển
 
 Quy tắc về phong cách mỹ thuật, pose hội thoại, hướng nhìn, face anchor, mốc bàn
