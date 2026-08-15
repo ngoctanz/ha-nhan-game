@@ -1,0 +1,67 @@
+{
+  "id": "ha_nhan",
+  "displayName": "Hà Nhân",
+  "defaultEmotion": "angry",
+  "sharedFaceLibrary": "../../faces/catalog.csv",
+  "movementAnimations": {
+    "sneak": {
+      "root": "actions/sneak",
+      "fps": 9,
+      "frameCount": 6,
+      "control": "Ctrl + A/D"
+    },
+    "goofy_walk": {
+      "root": "actions/goofy_walk",
+      "fps": 22,
+      "frameCount": 33,
+      "source": "ha-nhan-chibi.gif",
+      "control": "C + A/D"
+    }
+  },
+  "emotions": {
+    "angry": {
+      "root": "emotions/angry/actions",
+      "animations": {
+        "idle": {
+          "fps": 3,
+          "loop": true,
+          "frames": [
+            "idle/idle_neutral.png",
+            "idle/idle_weight_shift.png"
+          ]
+        },
+        "walk": {
+          "fps": 10,
+          "loop": true,
+          "frames": [
+            "walk/walk_01.png",
+            "walk/walk_02.png",
+            "walk/walk_03.png",
+            "walk/walk_04.png",
+            "walk/walk_05.png",
+            "walk/walk_06.png",
+            "walk/walk_07.png",
+            "walk/walk_08.png",
+            "walk/walk_09.png"
+          ]
+        },
+        "sit": {
+          "fps": 2,
+          "loop": false,
+          "frames": [
+            "sit/sit_transition.png",
+            "sit/sit_01.png",
+            "sit/sit_02.png"
+          ]
+        }
+      },
+      "actions": {
+        "hands_folded": "gesture/hands_folded.png",
+        "present_low": "gesture/present_low.png",
+        "present_open": "gesture/present_open.png",
+        "point": "gesture/point.png",
+        "wave": "gesture/wave.png"
+      }
+    }
+  }
+}
