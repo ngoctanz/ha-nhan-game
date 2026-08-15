@@ -1,0 +1,35 @@
+{
+  "name": "Trưởng thôn",
+  "design": {
+    "identity": "Red blindfold, yellow flower, topknot, pointed beard, brown and beige robe, crooked wooden staff",
+    "eyesVisible": false,
+    "facing": "right"
+  },
+  "walk": {
+    "fps": 9,
+    "loop": true,
+    "canvas": [300, 460],
+    "origin": [150, 432],
+    "frames": [
+      "walk/walk_01.png",
+      "walk/walk_02.png",
+      "walk/walk_03.png",
+      "walk/walk_04.png",
+      "walk/walk_05.png",
+      "walk/walk_06.png",
+      "walk/walk_07.png",
+      "walk/walk_08.png"
+    ]
+  },
+  "expressions": {
+    "neutral": "expressions/fullbody_neutral.png",
+    "calm": "expressions/calm.png",
+    "laughing": "expressions/laughing.png",
+    "angry": "expressions/angry.png",
+    "shocked": "expressions/shocked.png",
+    "sad": "expressions/sad.png",
+    "scheming": "expressions/scheming.png",
+    "embarrassed": "expressions/embarrassed.png",
+    "proud": "expressions/proud.png"
+  }
+}
