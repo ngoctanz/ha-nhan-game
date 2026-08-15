@@ -27,11 +27,17 @@ GameInput InputSystem::Poll()
     if (IsKeyDown(KEY_A) || IsKeyDown(KEY_LEFT)) input.moveAxis -= 1.0F;
     if (IsKeyDown(KEY_D) || IsKeyDown(KEY_RIGHT)) input.moveAxis += 1.0F;
     input.sprintHeld = IsKeyDown(KEY_LEFT_SHIFT) || IsKeyDown(KEY_RIGHT_SHIFT);
-    input.sneakHeld = IsKeyDown(KEY_LEFT_CONTROL) || IsKeyDown(KEY_RIGHT_CONTROL);
-    input.goofyHeld = IsKeyDown(KEY_C);
+    const bool sneakKeyPressed = IsKeyPressed(KEY_LEFT_CONTROL) || IsKeyPressed(KEY_RIGHT_CONTROL);
+    if (sneakKeyPressed) sneakToggle_ = !sneakToggle_;
+    input.sneakHeld = sneakToggle_;  // applies to both desktop and mobile
 
     input.pointerPressed = IsMouseButtonPressed(MOUSE_BUTTON_LEFT);
     input.pointerScreen = GetMousePosition();
+    input.hostMenuPressed = IsKeyPressed(KEY_P);
+    input.storageMenuPressed = IsKeyPressed(KEY_I);
+    input.menuBackPressed = IsKeyPressed(KEY_ESCAPE);
+    input.menuUpPressed = IsKeyPressed(KEY_W) || IsKeyPressed(KEY_UP);
+    input.menuDownPressed = IsKeyPressed(KEY_S) || IsKeyPressed(KEY_DOWN);
 
     if (MobileControlsEnabled())
     {
@@ -39,6 +45,7 @@ GameInput InputSystem::Poll()
 #if defined(HA_NHAN_MOBILE_UI_PREVIEW) && !defined(PLATFORM_ANDROID)
         if (IsMouseButtonDown(MOUSE_BUTTON_LEFT)) contactCount = std::max(contactCount, 1);
 #endif
+        bool sneakButtonDown = false;
         for (int index = 0; index < contactCount; ++index)
         {
             Vector2 point = GetTouchPosition(index);
@@ -50,16 +57,17 @@ GameInput InputSystem::Poll()
             else if (PointInCircle(point, MobileLayout::MoveRight, MobileLayout::MoveRadius))
                 input.moveAxis = 1.0F;
 
-            input.goofyHeld = input.goofyHeld ||
-                PointInCircle(point, MobileLayout::Goofy, MobileLayout::ActionRadius);
-            input.sneakHeld = input.sneakHeld ||
+            sneakButtonDown = sneakButtonDown ||
                 PointInCircle(point, MobileLayout::Sneak, MobileLayout::ActionRadius);
         }
+        // Sneak button is a toggle: rising edge (not-held → held) flips state.
+        if (sneakButtonDown && !sneakWasHeld_) sneakToggle_ = !sneakToggle_;
+        sneakWasHeld_ = sneakButtonDown;
+        input.sneakHeld = sneakToggle_;
 
         input.pointerConsumedByControls =
             PointInCircle(input.pointerScreen, MobileLayout::MoveLeft, MobileLayout::MoveRadius) ||
             PointInCircle(input.pointerScreen, MobileLayout::MoveRight, MobileLayout::MoveRadius) ||
-            PointInCircle(input.pointerScreen, MobileLayout::Goofy, MobileLayout::ActionRadius) ||
             PointInCircle(input.pointerScreen, MobileLayout::Sneak, MobileLayout::ActionRadius);
     }
 

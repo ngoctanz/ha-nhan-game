@@ -29,6 +29,15 @@ void Animation::Update(float deltaTime)
     frameCursor_ = std::fmod(frameCursor_ + fps_ * deltaTime, static_cast<float>(frames_.size()));
 }
 
+bool Animation::UpdateOnce(float deltaTime)
+{
+    if (frames_.empty()) return true;
+    frameCursor_ += fps_ * deltaTime;
+    if (frameCursor_ < static_cast<float>(frames_.size())) return false;
+    frameCursor_ = static_cast<float>(frames_.size() - 1);
+    return true;
+}
+
 void Animation::Reset()
 {
     frameCursor_ = 0.0F;
@@ -47,5 +56,11 @@ const Texture2D &Animation::Current() const
 int Animation::FrameCount() const
 {
     return static_cast<int>(frames_.size());
+}
+
+int Animation::CurrentIndex() const
+{
+    if (frames_.empty()) return 0;
+    return static_cast<int>(frameCursor_) % static_cast<int>(frames_.size());
 }
 } // namespace game

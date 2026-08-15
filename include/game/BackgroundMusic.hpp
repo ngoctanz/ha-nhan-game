@@ -18,6 +18,8 @@ public:
     void Update(float deltaTime);
 
 private:
+    void Unload();
+
     Music music_ = {};
     unsigned char *encodedData_ = nullptr;
     int encodedDataSize_ = 0;

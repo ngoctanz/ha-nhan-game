@@ -18,10 +18,12 @@ public:
     bool Load(const std::vector<std::string> &paths, float fps,
               Rectangle crop = {}, int resizedWidth = 0, int resizedHeight = 0);
     void Update(float deltaTime);
+    bool UpdateOnce(float deltaTime);
     void Reset();
     [[nodiscard]] bool IsLoaded() const;
     [[nodiscard]] const Texture2D &Current() const;
     [[nodiscard]] int FrameCount() const;
+    [[nodiscard]] int CurrentIndex() const;
 
 private:
     std::vector<Texture2D> frames_;

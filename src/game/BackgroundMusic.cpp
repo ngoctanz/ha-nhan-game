@@ -7,23 +7,34 @@ namespace game
 {
 BackgroundMusic::~BackgroundMusic()
 {
+    Unload();
+}
+
+void BackgroundMusic::Unload()
+{
     if (loaded_)
     {
         StopMusicStream(music_);
         UnloadMusicStream(music_);
     }
     if (encodedData_ != nullptr) UnloadFileData(encodedData_);
+    music_ = {};
+    encodedData_ = nullptr;
+    encodedDataSize_ = 0;
+    loaded_ = false;
 }
 
 bool BackgroundMusic::Load(const std::string &relativePath, float targetVolume)
 {
     if (!IsAudioDeviceReady()) return false;
+    Unload();
 
     const std::string path = ResolveAssetPath(relativePath);
     encodedData_ = LoadFileData(path.c_str(), &encodedDataSize_);
     if (encodedData_ == nullptr || encodedDataSize_ <= 0) return false;
 
-    music_ = LoadMusicStreamFromMemory(".mp3", encodedData_, encodedDataSize_);
+    const char *fileType = relativePath.ends_with(".ogg") ? ".ogg" : ".mp3";
+    music_ = LoadMusicStreamFromMemory(fileType, encodedData_, encodedDataSize_);
     loaded_ = IsAudioStreamValid(music_.stream);
     if (!loaded_) return false;
 

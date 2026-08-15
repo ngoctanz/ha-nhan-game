@@ -1,104 +1,152 @@
 #include "game/FaceLibrary.hpp"
-#include "game/AssetLocator.hpp"
+#include "game/TextureAsset.hpp"
 
-#include <sstream>
+#include <algorithm>
+#include <array>
+#include <cmath>
+#include <string>
+#include <utility>
 
 namespace game
 {
+namespace
+{
+constexpr std::array MaleFolders = {
+    "01_confused", "02_deadpan", "03_knowing_look", "04_smug", "05_laughing",
+    "06_surprised", "07_annoyed", "08_skeptical", "09_resigned", "10_realization",
+    "11_blushing", "12_confused_frown", "13_worried", "14_blank_stare", "15_puzzled",
+    "16_innocent_smile", "17_disbelief", "18_stunned_disbelief", "19_realizing",
+    "20_grumpy", "21_detached_stare", "22_guilty_startle", "23_scheming_daydream",
+    "24_uneasy", "25_cool", "26_suspicious", "27_concerned", "28_innocent",
+    "29_weary", "30_nosebleed", "31_dizzy", "32_relieved_smile", "33_crying",
+    "34_suspicious_stare", "35_ugly_crying", "36_emotional_pain", "37_relaxed_smile",
+    "38_angry", "39_bashful_smile", "40_devious", "41_dumbfounded", "42_terrified",
+    "43_mentally_exhausted", "44_happy", "45_old_man", "46_knowing_smirk",
+    "47_serious", "48_disgusted", "49_furious", "50_reminiscing"};
+
+constexpr std::array FemaleFolders = {
+    "1_nervous_smile", "2_annoyed", "3_sad", "4_terrified", "5_pouting",
+    "07_angry", "08_blank", "09_happy", "10_dizzy", "11_excited", "12_worried",
+    "13_flustered", "14_crying", "15_furious", "16_panic_crying", "17_shocked",
+    "18_smug", "19_confident_smile", "20_displeased", "21_uneasy", "22_mischievous",
+    "23_frustrated", "24_embarrassed", "25_concerned", "26_wink_smile",
+    "27_cheerful", "28_playful_wink", "29_eyes_closed_smile", "30_shadowed"};
+
+std::string Key(FaceGender gender, std::string_view expression)
+{
+    std::string key = gender == FaceGender::Male ? "male:" : "female:";
+    key.append(expression);
+    return key;
+}
+
+std::string_view ExpressionFromFolder(std::string_view folder)
+{
+    const std::size_t separator = folder.find('_');
+    return separator == std::string_view::npos ? folder : folder.substr(separator + 1);
+}
+} // namespace
+
 FaceLibrary::~FaceLibrary()
 {
-    for (auto &[_, texture] : faces_) UnloadTexture(texture);
+    for (Clip &clip : clips_)
+        for (Texture2D &frame : clip.frames) UnloadTextureAsset(frame);
 }
 
 bool FaceLibrary::Load()
 {
-    const std::string catalogPath = ResolveAssetPath("assets/faces/catalog.csv");
-    char *catalogText = LoadFileText(catalogPath.c_str());
-    if (catalogText == nullptr) return false;
-    std::istringstream catalog(catalogText);
-    UnloadFileText(catalogText);
+    if (!clips_.empty()) return true;
+    clips_.reserve(MaleFolders.size() + FemaleFolders.size());
+    ids_.reserve(MaleFolders.size() + FemaleFolders.size());
+    bool allLoaded = true;
 
-    std::string line;
-    std::getline(catalog, line); // header
-    int expectedCount = 0;
-    const std::string root = "assets/faces/expressions/";
-    while (std::getline(catalog, line))
+    const auto loadGender = [this, &allLoaded](FaceGender gender, const auto &folders,
+                                               std::string_view root)
     {
-        if (line.empty()) continue;
-        std::istringstream row(line);
-        std::string sourceId;
-        std::string name;
-        std::getline(row, sourceId, ',');
-        std::getline(row, name, ',');
-        if (name.empty()) continue;
-        ++expectedCount;
-        Texture2D texture = LoadTexture(ResolveAssetPath(root + name + ".png").c_str());
-        if (texture.id == 0) continue;
-        SetTextureFilter(texture, TEXTURE_FILTER_BILINEAR);
-        faces_.emplace(name, texture);
-    }
-    return expectedCount > 0 && static_cast<int>(faces_.size()) == expectedCount;
+        for (std::string_view folder : folders)
+        {
+            if (clips_.size() >= FaceId::InvalidValue)
+            {
+                allLoaded = false;
+                return;
+            }
+            Clip clip;
+            clip.frames.reserve(6);
+            for (int frame = 1; frame <= 6; ++frame)
+            {
+                const std::string path = std::string(root) + std::string(folder) +
+                    "/frame_0" + std::to_string(frame) + ".png";
+                Texture2D texture = LoadTextureAsset(path);
+                allLoaded = allLoaded && texture.id != 0;
+                clip.frames.push_back(texture);
+            }
+            const FaceId id{static_cast<std::uint16_t>(clips_.size())};
+            ids_.emplace(Key(gender, ExpressionFromFolder(folder)), id);
+            clips_.push_back(std::move(clip));
+        }
+    };
+
+    loadGender(FaceGender::Male, MaleFolders, "assets/faces/boy_faces/");
+    loadGender(FaceGender::Female, FemaleFolders, "assets/faces/girl_faces/");
+    maleFallback_ = Find(FaceGender::Male, "deadpan");
+    femaleFallback_ = Find(FaceGender::Female, "blank");
+    return allLoaded && maleFallback_.IsValid() && femaleFallback_.IsValid();
 }
 
-const Texture2D *FaceLibrary::Get(const std::string &expression) const
+FaceId FaceLibrary::Find(FaceGender gender, std::string_view expression) const
 {
-    const auto found = faces_.find(expression);
-    if (found != faces_.end()) return &found->second;
-
-    // Generic aliases keep old dialogue/data files compatible with the
-    // larger exported library.
-    static const std::unordered_map<std::string, std::string> aliases = {
-        {"neutral", "verified_skeptical_tease"},
-        {"happy", "verified_beaming_closed_eyes"},
-        {"laugh", "verified_beaming_closed_eyes"},
-        {"smug", "verified_roundface_teasing_smirk"},
-        {"angry", "verified_angry_side_eye"},
-        {"furious", "verified_angry_surprise"},
-        {"annoyed", "verified_indecisive_thought"},
-        {"suspicious", "verified_knowing_suspicion"},
-        {"shocked", "verified_shocked_gasp"},
-        {"scared", "verified_disbelief_panic"},
-        {"crying", "verified_full_cry"},
-        {"pleading", "worried_talking"},
-        {"embarrassed", "verified_embarrassed_blush"},
-        {"confused", "verified_confused_side_eye"},
-        {"disgusted", "verified_angry_side_eye"},
-        {"deadpan", "exhausted_blank"},
-        {"smug_side_smile", "verified_awkward_conflict"},
-        {"furious_shout", "verified_angry_surprise"},
-        {"skeptical_wink", "verified_focused_contemplation"},
-        {"panicked_shout", "verified_baffled_shout"},
-        {"content_smile", "verified_displeased_smile"},
-        {"cheerful_surprise", "verified_excited_surprise"},
-        {"angry_side_eye", "verified_helpless_contemplation"},
-        {"worried_grimace", "verified_goofy_grin"},
-        {"cool_sunglasses", "verified_cool_confidence"},
-        {"shy_pout", "verified_childlike_pout"},
-        {"mischievous_grin", "verified_beaming_closed_eyes"},
-        {"embarrassed_nosebleed", "verified_embarrassed_blush"},
-        {"smug_realistic", "verified_dazed_blank_stare"},
-        {"sad_tears", "verified_tearful_restraint"},
-        {"laughing_tears", "verified_full_cry"},
-        {"crying_grimace", "verified_pained_flinch"},
-        {"surprised_open_mouth", "verified_disbelief_open_mouth"},
-        {"delighted_laugh", "verified_angry_yell"},
-        {"terrified_scream", "verified_startled_panic"},
-        {"subtle_smirk", "verified_roundface_teasing_smirk"},
-        {"confused_side_glance", "verified_friendly_teasing_glance"},
-        {"worried_goatee", "verified_wise_goatee"},
-        {"disgusted_side_eye", "verified_angry_side_eye"},
-        {"stern_angry", "verified_stunned_disbelief"},
-        {"suspicious_concern", "verified_extreme_disbelief"},
-        {"furious_disapproval", "verified_steely_determination"},
-        {"neutral_realistic", "verified_skeptical_tease"}};
-    const auto alias = aliases.find(expression);
-    if (alias != aliases.end())
-    {
-        const auto resolved = faces_.find(alias->second);
-        if (resolved != faces_.end()) return &resolved->second;
-    }
-
-    const auto neutral = faces_.find("verified_skeptical_tease");
-    return neutral == faces_.end() ? nullptr : &neutral->second;
+    const auto found = ids_.find(Key(gender, expression));
+    if (found != ids_.end()) return found->second;
+    return gender == FaceGender::Male ? maleFallback_ : femaleFallback_;
 }
+
+const Texture2D *FaceLibrary::Frame(FaceId face, float elapsedSeconds) const
+{
+    if (!face.IsValid() || face.value >= clips_.size()) return nullptr;
+    const Clip &clip = clips_[face.value];
+    if (clip.frames.empty()) return nullptr;
+    const float safeTime = std::max(0.0F, elapsedSeconds);
+    const std::size_t index = static_cast<std::size_t>(safeTime * clip.framesPerSecond) %
+                              clip.frames.size();
+    const Texture2D &texture = clip.frames[index];
+    return texture.id == 0 ? nullptr : &texture;
+}
+
+std::size_t FaceLibrary::ExpressionCount() const { return clips_.size(); }
+
+std::size_t FaceLibrary::TextureCount() const
+{
+    std::size_t count = 0;
+    for (const Clip &clip : clips_) count += clip.frames.size();
+    return count;
+}
+
+bool FaceAnimator::SetExpression(const FaceLibrary &library, FaceGender gender,
+                                 std::string_view expression)
+{
+    const bool sameName = gender_ == gender && expression_.size() == expression.size() &&
+        std::equal(expression_.begin(), expression_.end(), expression.begin());
+    if (sameName && face_.IsValid()) return true;
+
+    const FaceId next = library.Find(gender, expression);
+    if (!next.IsValid()) return false;
+    gender_ = gender;
+    expression_.assign(expression);
+    if (next == face_) return true;
+    face_ = next;
+    elapsedSeconds_ = 0.0F;
+    return true;
+}
+
+void FaceAnimator::Update(float deltaTime)
+{
+    if (deltaTime > 0.0F) elapsedSeconds_ += deltaTime;
+    if (elapsedSeconds_ > 3600.0F) elapsedSeconds_ = std::fmod(elapsedSeconds_, 3600.0F);
+}
+
+const Texture2D *FaceAnimator::Current(const FaceLibrary &library) const
+{
+    return library.Frame(face_, elapsedSeconds_);
+}
+
+FaceId FaceAnimator::CurrentId() const { return face_; }
 } // namespace game

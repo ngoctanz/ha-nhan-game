@@ -9,10 +9,40 @@ namespace game
 enum class DialogueAction
 {
     None,
+    ThrowAtSystem,
+    OfferSystemReward,
+    LeaveBedroom,
+    NeighborLeaves,
+    EnterBambooVillage,
+    FinishIntro,
     StartChickenQuest,
     SpawnShard,
     ReturnToElder,
-    CompleteQuest
+    CompleteQuest,
+    UnlockVillageExit,
+    HideAtVillageRock,
+    ShowInterventionChoice,
+    StartFlyingKick,
+    StartRuffianRetreat,
+    StartSneakPursuit,
+    StartEscapeRun,
+    ReturnToNeighborHouse,
+    ApproachNeighborFence,
+    EnterNeighborBackyard,
+    ShowProvocationChoice,
+    BeginEnemyEncounter,
+    PreviewCombatStorage,
+    UnlockThrowSkill,
+    FinishNeighborNight
+};
+
+enum class DialogueTarget
+{
+    None,
+    Player,
+    System,
+    Neighbor,
+    Elder
 };
 
 struct DialogueLine
@@ -22,6 +52,7 @@ struct DialogueLine
     std::string portrait;
     std::string action;
     std::string sound;
+    DialogueTarget target = DialogueTarget::None;
 };
 
 class Dialogue
